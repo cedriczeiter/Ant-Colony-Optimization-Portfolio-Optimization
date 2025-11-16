@@ -4,17 +4,6 @@ A comparative study of metaheuristic algorithms for solving the portfolio optimi
 
 **Authors:** Cédric Zeiter & Alexandre Faroux
 
-## Table of Contents
-- [Overview](#overview)
-- [Problem Statement](#problem-statement)
-- [Algorithms Implemented](#algorithms-implemented)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Results](#results)
-- [Technical Details](#technical-details)
-- [License](#license)
-
 ## Overview
 
 This project implements and compares three different optimization approaches for portfolio allocation:
@@ -113,98 +102,6 @@ cd Ant-Colony-Optimization-Portfolio-Optimization
 pip install -r requirements.txt
 ```
 
-Required packages:
-- `numpy` - Numerical computing
-- `pandas` - Data manipulation
-- `yfinance` - Stock data fetching
-- `matplotlib` - Visualization
-- `seaborn` - Statistical plotting
-- `deap` - Genetic algorithm framework
-- `lxml` - HTML parsing for S&P 500 list
-- `openpyxl` - Excel file support
-
-## Usage
-
-### Basic Example
-
-```python
-from datetime import datetime, timedelta
-from src.get_data import get_data_wrapper, get_sp500_tickers
-from src.aco_algorithm import aco_portfolio_optimization
-from src.deap_GA import deap_portfolio_optimization
-from src.brute_force import brute_force_portfolio_optimization
-
-# Fetch S&P 500 stock data
-tickers = get_sp500_tickers()
-from_date = datetime(2022, 1, 1)
-to_date = from_date + timedelta(days=3*365)
-
-# Get historical data and calculate statistics
-annualized_returns, risks, covariance_matrix = get_data_wrapper(tickers, from_date, to_date)
-
-# Run ACO optimization
-weights_aco, sharpe_aco, iterations_aco, history_aco, _, timeline_aco = \
-    aco_portfolio_optimization(annualized_returns, covariance_matrix)
-
-# Run GA optimization
-weights_ga, sharpe_ga, generations_ga, history_ga, _, timeline_ga = \
-    deap_portfolio_optimization(annualized_returns, covariance_matrix)
-
-# Run brute force baseline
-weights_bf, sharpe_bf, iterations_bf, history_bf, _, timeline_bf = \
-    brute_force_portfolio_optimization(annualized_returns, covariance_matrix)
-
-print(f"ACO Sharpe Ratio: {sharpe_aco:.4f}")
-print(f"GA Sharpe Ratio: {sharpe_ga:.4f}")
-print(f"Brute Force Sharpe Ratio: {sharpe_bf:.4f}")
-```
-
-### Running the Main Comparison
-
-```bash
-cd src/examples
-python main.py
-```
-
-This will:
-1. Download historical data for all S&P 500 stocks
-2. Calculate returns and covariance matrix
-3. Run all three algorithms with a 30-second time limit
-4. Save results to text files
-5. Generate comparison plots
-
-### Configuration
-
-Algorithm parameters can be adjusted in `src/data_config.py`:
-
-```python
-# Portfolio Constraints
-max_weight = 0.3          # Maximum 30% in any single asset
-min_weight = 0.005        # Minimum 0.5% if asset is included
-MINACTIVE = 10            # Minimum number of active assets
-
-# Time limits
-max_seconds = 30          # Maximum runtime per algorithm
-time_to_convergence = 5   # Seconds without improvement before stopping
-
-# ACO Parameters
-aco_params = {
-    "num_ants": 200,      # Number of ants per iteration
-    "alpha": 20,          # Pheromone influence
-    "evaporation": 0.7    # Pheromone retention rate
-}
-
-# GA Parameters
-ga_params = {
-    "population_size": 200,
-    "mutation_mutpb": 0.3,
-    "mutation_indpb": 0.1,
-    "cxpb": 0.7,
-    "tournsize": 3,
-    "n_elite": 3
-}
-```
-
 ## Results
 
 Our experiments comparing ACO, GA, and random sampling on S&P 500 portfolio optimization show:
@@ -222,83 +119,12 @@ Our experiments comparing ACO, GA, and random sampling on S&P 500 portfolio opti
 3. **Constraint Handling**: Custom constraint enforcement ensures all solutions remain feasible
 4. **Scalability**: Algorithms successfully handle portfolios with 400+ assets (full S&P 500)
 
-### Example Results
-
-On a typical run with S&P 500 data (2022-2024):
-- **ACO Sharpe Ratio**: ~1.2-1.5
-- **GA Sharpe Ratio**: ~1.2-1.5
-- **Random Sampling**: ~0.8-1.1
-
-*Note: Results vary based on time period and market conditions*
-
-## Technical Details
-
-### Portfolio Evaluation
-
-The Sharpe ratio is calculated using:
-```python
-def portfolio_performance(weights, expected_returns, cov_matrix):
-    port_return = np.dot(weights, expected_returns)
-    port_vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
-    sharpe = (port_return - risk_free_rate) / port_vol
-    return sharpe, port_return, port_vol
-```
-
-### Constraint Enforcement
-
-Our constraint enforcement algorithm:
-1. Clips weights to [min_weight, max_weight] range
-2. Redistributes excess weight proportionally
-3. Eliminates positions below minimum threshold
-4. Ensures at least `MINACTIVE` positions are held
-5. Normalizes weights to sum to 1
-
-### Data Processing
-
-Historical data is:
-- Downloaded from Yahoo Finance using `yfinance`
-- Cached locally in CSV files
-- Processed to calculate annualized returns and covariance
-- Filtered to remove invalid or incomplete data
-
-### Convergence Criteria
-
-Algorithms can stop either:
-- After reaching the maximum time limit (30 seconds)
-- After no improvement for 5 consecutive seconds (optional)
-
-## Future Improvements
-
-Potential extensions to this project:
-
-- [ ] Implement hybrid ACO-GA algorithm
-- [ ] Add support for transaction costs and taxes
-- [ ] Implement additional risk metrics (VaR, CVaR, etc.)
-- [ ] Add backtesting framework for out-of-sample validation
-- [ ] Experiment with different pheromone update strategies
-- [ ] Implement parallel evaluation for faster computation
-- [ ] Add real-time portfolio rebalancing capabilities
-
-## Contributing
-
-This project was developed as part of an academic course. While we welcome feedback and suggestions, please note this is primarily an educational project.
-
 ## Acknowledgments
 
 - **ETH Zürich** - For providing the course framework
 - **DEAP Team** - For the excellent genetic algorithm library
 - **Yahoo Finance** - For accessible historical stock data
 
-## References
-
-1. Dorigo, M., & Stützle, T. (2004). *Ant Colony Optimization*. MIT Press.
-2. Markowitz, H. (1952). "Portfolio Selection." *The Journal of Finance*, 7(1), 77-91.
-3. Sharpe, W. F. (1966). "Mutual Fund Performance." *The Journal of Business*, 39(1), 119-138.
-4. DEAP Documentation: https://deap.readthedocs.io/
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
