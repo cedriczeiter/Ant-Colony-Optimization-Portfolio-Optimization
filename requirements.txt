@@ -1,0 +1,8 @@
+numpy
+yfinance
+pandas
+seaborn
+matplotlib
+lxml
+deap
+openpyxl
