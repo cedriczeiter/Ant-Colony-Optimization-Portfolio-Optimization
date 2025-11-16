@@ -88,8 +88,7 @@ A baseline approach that:
 │       ├── main.py                # Main comparison script
 │       ├── main_run_many_times.py # Multiple runs for statistics
 │       └── main_param_optimize.py # Parameter tuning experiments
-├── data/                          # Historical stock price data (CSV files)
-├── results/                       # Algorithm comparison results
+├── summarized_results.txt         # Final submission, containing various plots
 ├── requirements.txt               # Python dependencies
 ├── LICENSE                        # MIT License
 └── README.md                      # This file
