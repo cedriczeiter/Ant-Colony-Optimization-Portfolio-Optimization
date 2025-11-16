@@ -104,7 +104,7 @@ A baseline approach that:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/cedriczeiter/Ant-Colony-Optimization-Portfolio-Optimization.git
+git clone git@github.com:cedriczeiter/Ant-Colony-Optimization-Portfolio-Optimization.git
 cd Ant-Colony-Optimization-Portfolio-Optimization
 ```
 
