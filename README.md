@@ -25,6 +25,8 @@ where:
 - $R_f$ is the risk-free rate (3%)
 - $\sigma_p$ is the portfolio volatility (standard deviation)
 
+After adding realistic constraints to the portfolio weights, the problem becomes more challenging and reflective of real-world investment scenarios. This non-convex optimization problem requires sophisticated algorithms to find high-quality solutions efficiently, which is why we explore metaheuristic approaches like ACO and GA.
+
 ### Constraints
 
 - **Maximum weight**: No single asset can exceed 30% of the portfolio
@@ -101,30 +103,6 @@ cd Ant-Colony-Optimization-Portfolio-Optimization
 ```bash
 pip install -r requirements.txt
 ```
-
-## Results
-
-Our experiments comparing ACO, GA, and random sampling on S&P 500 portfolio optimization show:
-
-### Performance Comparison
-
-- **ACO** typically converges faster and finds high-quality solutions within 5-10 seconds
-- **Genetic Algorithm** achieves comparable or slightly better final Sharpe ratios but may require more iterations
-- **Random Sampling** serves as a baseline and demonstrates the value of structured search strategies
-
-### Key Findings
-
-1. **Convergence Speed**: ACO shows rapid initial improvement due to its pheromone-guided exploration
-2. **Solution Quality**: Both ACO and GA significantly outperform random sampling
-3. **Constraint Handling**: Custom constraint enforcement ensures all solutions remain feasible
-4. **Scalability**: Algorithms successfully handle portfolios with 400+ assets (full S&P 500)
-
-## Acknowledgments
-
-- **ETH Zürich** - For providing the course framework
-- **DEAP Team** - For the excellent genetic algorithm library
-- **Yahoo Finance** - For accessible historical stock data
-
 
 ---
 
